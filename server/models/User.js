@@ -1,10 +1,10 @@
 const mongoose = require('../db/connect');
-const { Schema, SchemaTypes } = require('../db/connect');
+const { Schema, SchemaTypes } = mongoose;
+const { v4: uuidv4 } = require('uuid');
 
 const UserSchema = new Schema({
     user_id: {
         type: SchemaTypes.String,
-        required: true,
         unique: true,
         index: true
     },
@@ -12,6 +12,7 @@ const UserSchema = new Schema({
         type: SchemaTypes.String,
         required: true,
         index: true,
+        trim: true
     },
     password: {
         type: SchemaTypes.String,
@@ -24,7 +25,8 @@ const UserSchema = new Schema({
         required: true,
         unique: true,
         match: /.+@.+\..+/,
-        index: true
+        index: true,
+        lowercase: true
     },
     bio: {
         type: SchemaTypes.String,
@@ -32,8 +34,7 @@ const UserSchema = new Schema({
         index: true,
     },
     profile_pic: {
-        type: SchemaTypes.Buffer,
-        required: true,
+        type: SchemaTypes.Buffer
     },
     city: {
         type: SchemaTypes.String,
@@ -46,7 +47,6 @@ const UserSchema = new Schema({
     gender: {
         type: SchemaTypes.String,
         enum: ['male', 'female', 'other'],
-        required: true,
     },
     followers: {
         type: SchemaTypes.Number,
@@ -57,30 +57,36 @@ const UserSchema = new Schema({
         required: true
     },
     activity: {
-        ref: 'Activity',
+        // ref: 'Activity',
         noofActivities: {
             type: SchemaTypes.Number,
             time: {
-                type: SchemaTypes.Number,
-                required: true
+                type: SchemaTypes.String,
+                required: true,
+                match: /^\d{2}:[0-5]\d:[0-5]\d$/,
+                default: '00:00:00'
             },
             required: true
         },
         noofActivities_Year: {
             type: SchemaTypes.Number,
             time: {
-                type: SchemaTypes.Number,
-                required: true
+                type: SchemaTypes.String,
+                required: true,
+                match: /^\d{2}:[0-5]\d:[0-5]\d$/,
+                default: '00:00:00'
             },
             required: true
         },
         ride: {
-            ref: 'Ride',
+            // ref: 'Ride',
             total_kms: {
                 type: SchemaTypes.Number,
                 time: {
-                    type: SchemaTypes.Number,
-                    required: true
+                    type: SchemaTypes.String,
+                    required: true,
+                    match: /^\d{2}:[0-5]\d:[0-5]\d$/,
+                    default: '00:00:00'
                 },
                 required: true
             },
@@ -95,16 +101,20 @@ const UserSchema = new Schema({
             total_kms_year: {
                 type: SchemaTypes.Number,
                 time: {
-                    type: SchemaTypes.Number,
-                    required: true
+                    type: SchemaTypes.String,
+                    required: true,
+                    match: /^\d{2}:[0-5]\d:[0-5]\d$/,
+                    default: '00:00:00'
                 },
                 required: true
             },
             longest_Ride: {
                 type: SchemaTypes.Number,
                 time: {
-                    type: SchemaTypes.Number,
-                    required: true
+                    type: SchemaTypes.String,
+                    required: true,
+                    match: /^\d{2}:[0-5]\d:[0-5]\d$/,
+                    default: '00:00:00'
                 },
                 required: true
             },
@@ -113,8 +123,10 @@ const UserSchema = new Schema({
             total_kms: {
                 type: SchemaTypes.Number,
                 time: {
-                    type: SchemaTypes.Number,
-                    required: true
+                    type: SchemaTypes.String,
+                    required: true,
+                    match: /^\d{2}:[0-5]\d:[0-5]\d$/,
+                    default: '00:00:00'
                 },
                 required: true
             },
@@ -129,16 +141,20 @@ const UserSchema = new Schema({
             total_kms_year: {
                 type: SchemaTypes.Number,
                 time: {
-                    type: SchemaTypes.Number,
-                    required: true
+                    type: SchemaTypes.String,
+                    required: true,
+                    match: /^\d{2}:[0-5]\d:[0-5]\d$/,
+                    default: '00:00:00'
                 },
                 required: true
             },
             longest_Walk: {
                 type: SchemaTypes.Number,
                 time: {
-                    type: SchemaTypes.Number,
-                    required: true
+                    type: SchemaTypes.String,
+                    required: true,
+                    match: /^\d{2}:[0-5]\d:[0-5]\d$/,
+                    default: '00:00:00'
                 },
                 required: true
             }
@@ -147,8 +163,10 @@ const UserSchema = new Schema({
             total_kms: {
                 type: SchemaTypes.Number,
                 time: {
-                    type: SchemaTypes.Number,
-                    required: true
+                    type: SchemaTypes.String,
+                    required: true,
+                    match: /^\d{2}:[0-5]\d:[0-5]\d$/,
+                    default: '00:00:00'
                 },
                 required: true
             },
@@ -163,16 +181,20 @@ const UserSchema = new Schema({
             total_kms_year: {
                 type: SchemaTypes.Number,
                 time: {
-                    type: SchemaTypes.Number,
-                    required: true
+                    type: SchemaTypes.String,
+                    required: true,
+                    match: /^\d{2}:[0-5]\d:[0-5]\d$/,
+                    default: '00:00:00'
                 },
                 required: true
             },
             longest_Run: {
                 type: SchemaTypes.Number,
                 time: {
-                    type: SchemaTypes.Number,
-                    required: true
+                    type: SchemaTypes.String,
+                    required: true,
+                    match: /^\d{2}:[0-5]\d:[0-5]\d$/,
+                    default: '00:00:00'
                 },
                 required: true
             }
@@ -181,8 +203,10 @@ const UserSchema = new Schema({
             total_kms: {
                 type: SchemaTypes.Number,
                 time: {
-                    type: SchemaTypes.Number,
-                    required: true
+                    type: SchemaTypes.String,
+                    required: true,
+                    match: /^\d{2}:[0-5]\d:[0-5]\d$/,
+                    default: '00:00:00'
                 },
                 required: true
             },
@@ -197,16 +221,20 @@ const UserSchema = new Schema({
             total_kms_year: {
                 type: SchemaTypes.Number,
                 time: {
-                    type: SchemaTypes.Number,
-                    required: true
+                    type: SchemaTypes.String,
+                    required: true,
+                    match: /^\d{2}:[0-5]\d:[0-5]\d$/,
+                    default: '00:00:00'
                 },
                 required: true
             },
             longest_Workout: {
                 type: SchemaTypes.Number,
                 time: {
-                    type: SchemaTypes.Number,
-                    required: true
+                    type: SchemaTypes.String,
+                    required: true,
+                    match: /^\d{2}:[0-5]\d:[0-5]\d$/,
+                    default: '00:00:00'
                 },
                 required: true
             }
@@ -226,12 +254,51 @@ const UserSchema = new Schema({
         required: true,
         unique: true,
         index: true
-    }
+    },
+    primarySport: {
+        type: SchemaTypes.String,
+        enum: ['Ride', 'Run', 'Swim', 'Walk', 'Workout'],
+    },
+    dateOfBirth: {
+        type: SchemaTypes.Date,
+        required: true
+    },
+    weight: {
+        type: SchemaTypes.Number
+    },
+    weightUnit: {
+        type: SchemaTypes.String,
+        enum: ['kg', 'lbs'],
+        default: 'kg'
+    },
+    height: {
+        type: SchemaTypes.Number
+    },
+    heightUnit: {
+        type: SchemaTypes.String,
+        enum: ['cm', 'ft'],
+        default: 'cm'
+    },
 },
     {
         timestamps: true
     }
 );
+
+
+UserSchema.pre('save', function (next) {
+    // Generate unique user_id if not present
+    if (!this.user_id) {
+        this.user_id = uuidv4();
+    }
+
+    // Trim and clean name
+    if (this.fullName) {
+        this.fullName = this.fullName.trim();
+    }
+
+    next();
+});
 
 const User = mongoose.model('User', UserSchema);
 
