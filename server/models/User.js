@@ -1,6 +1,7 @@
 const mongoose = require('../db/connect');
 const { Schema, SchemaTypes } = mongoose;
 const { v4: uuidv4 } = require('uuid');
+const bcrypt = require('bcrypt');
 
 const UserSchema = new Schema({
     user_id: {
@@ -32,6 +33,7 @@ const UserSchema = new Schema({
         type: SchemaTypes.String,
         maxlength: 500,
         index: true,
+        default: ''
     },
     profile_pic: {
         type: SchemaTypes.Buffer
@@ -47,26 +49,28 @@ const UserSchema = new Schema({
     gender: {
         type: SchemaTypes.String,
         enum: ['male', 'female', 'other'],
+        required: true
     },
     followers: {
         type: SchemaTypes.Number,
-        required: true
+        default: 0
     },
     following: {
         type: SchemaTypes.Number,
-        required: true
+        default: 0
     },
     activity: {
         // ref: 'Activity',
         noofActivities: {
             type: SchemaTypes.Number,
+            default: 0,
             time: {
                 type: SchemaTypes.String,
                 required: true,
                 match: /^\d{2}:[0-5]\d:[0-5]\d$/,
                 default: '00:00:00'
             },
-            required: true
+            // required: true
         },
         noofActivities_Year: {
             type: SchemaTypes.Number,
@@ -76,7 +80,8 @@ const UserSchema = new Schema({
                 match: /^\d{2}:[0-5]\d:[0-5]\d$/,
                 default: '00:00:00'
             },
-            required: true
+            default: 0
+            // required: true
         },
         ride: {
             // ref: 'Ride',
@@ -88,15 +93,18 @@ const UserSchema = new Schema({
                     match: /^\d{2}:[0-5]\d:[0-5]\d$/,
                     default: '00:00:00'
                 },
-                required: true
+                default: 0
+                // required: true
             },
             numberofRides: {
                 type: SchemaTypes.Number,
-                required: true
+                // required: true
+                default: 0
             },
             numberofRides_Year: {
                 type: SchemaTypes.Number,
-                required: true
+                // required: true
+                default: 0
             },
             total_kms_year: {
                 type: SchemaTypes.Number,
@@ -106,7 +114,8 @@ const UserSchema = new Schema({
                     match: /^\d{2}:[0-5]\d:[0-5]\d$/,
                     default: '00:00:00'
                 },
-                required: true
+                // required: true
+                default: 0
             },
             longest_Ride: {
                 type: SchemaTypes.Number,
@@ -116,7 +125,8 @@ const UserSchema = new Schema({
                     match: /^\d{2}:[0-5]\d:[0-5]\d$/,
                     default: '00:00:00'
                 },
-                required: true
+                // required: true
+                default: 0
             },
         },
         walk: {
@@ -128,15 +138,18 @@ const UserSchema = new Schema({
                     match: /^\d{2}:[0-5]\d:[0-5]\d$/,
                     default: '00:00:00'
                 },
-                required: true
+                // required: true
+                default: 0
             },
             numberofWalks: {
                 type: SchemaTypes.Number,
-                required: true
+                // required: true
+                default: 0
             },
             numberofWalks_Year: {
                 type: SchemaTypes.Number,
-                required: true
+                // required: true
+                default: 0
             },
             total_kms_year: {
                 type: SchemaTypes.Number,
@@ -146,7 +159,8 @@ const UserSchema = new Schema({
                     match: /^\d{2}:[0-5]\d:[0-5]\d$/,
                     default: '00:00:00'
                 },
-                required: true
+                // required: true
+                default: 0
             },
             longest_Walk: {
                 type: SchemaTypes.Number,
@@ -156,7 +170,8 @@ const UserSchema = new Schema({
                     match: /^\d{2}:[0-5]\d:[0-5]\d$/,
                     default: '00:00:00'
                 },
-                required: true
+                // required: true
+                default: 0
             }
         },
         run: {
@@ -168,15 +183,18 @@ const UserSchema = new Schema({
                     match: /^\d{2}:[0-5]\d:[0-5]\d$/,
                     default: '00:00:00'
                 },
-                required: true
+                // required: true
+                default: 0
             },
             numberofRuns: {
                 type: SchemaTypes.Number,
-                required: true
+                // required: true
+                default: 0
             },
             numberofRuns_Year: {
                 type: SchemaTypes.Number,
-                required: true
+                // required: true
+                default: 0
             },
             total_kms_year: {
                 type: SchemaTypes.Number,
@@ -186,7 +204,8 @@ const UserSchema = new Schema({
                     match: /^\d{2}:[0-5]\d:[0-5]\d$/,
                     default: '00:00:00'
                 },
-                required: true
+                // required: true
+                default: 0
             },
             longest_Run: {
                 type: SchemaTypes.Number,
@@ -196,7 +215,8 @@ const UserSchema = new Schema({
                     match: /^\d{2}:[0-5]\d:[0-5]\d$/,
                     default: '00:00:00'
                 },
-                required: true
+                // required: true
+                default: 0
             }
         },
         workout: {
@@ -208,15 +228,18 @@ const UserSchema = new Schema({
                     match: /^\d{2}:[0-5]\d:[0-5]\d$/,
                     default: '00:00:00'
                 },
-                required: true
+                // required: true
+                default: 0
             },
             numberofWorkouts: {
                 type: SchemaTypes.Number,
-                required: true
+                // required: true
+                default: 0
             },
             numberofWorkouts_Year: {
                 type: SchemaTypes.Number,
-                required: true
+                // required: true
+                default: 0
             },
             total_kms_year: {
                 type: SchemaTypes.Number,
@@ -226,7 +249,8 @@ const UserSchema = new Schema({
                     match: /^\d{2}:[0-5]\d:[0-5]\d$/,
                     default: '00:00:00'
                 },
-                required: true
+                // required: true
+                default: 0
             },
             longest_Workout: {
                 type: SchemaTypes.Number,
@@ -236,7 +260,8 @@ const UserSchema = new Schema({
                     match: /^\d{2}:[0-5]\d:[0-5]\d$/,
                     default: '00:00:00'
                 },
-                required: true
+                // required: true
+                default: 0
             }
         }
     },
@@ -247,7 +272,8 @@ const UserSchema = new Schema({
     },
     two_factor_auth: {
         type: SchemaTypes.Number,
-        required: true
+        required: true,
+        default: false
     },
     phoneNumber: {
         type: SchemaTypes.String,
@@ -264,7 +290,8 @@ const UserSchema = new Schema({
         required: true
     },
     weight: {
-        type: SchemaTypes.Number
+        type: SchemaTypes.Number,
+        default: 0
     },
     weightUnit: {
         type: SchemaTypes.String,
@@ -272,7 +299,8 @@ const UserSchema = new Schema({
         default: 'kg'
     },
     height: {
-        type: SchemaTypes.Number
+        type: SchemaTypes.Number,
+        default: 0
     },
     heightUnit: {
         type: SchemaTypes.String,
@@ -286,7 +314,7 @@ const UserSchema = new Schema({
 );
 
 
-UserSchema.pre('save', function (next) {
+UserSchema.pre('save', async function (next) {
     // Generate unique user_id if not present
     if (!this.user_id) {
         this.user_id = uuidv4();
@@ -297,8 +325,17 @@ UserSchema.pre('save', function (next) {
         this.fullName = this.fullName.trim();
     }
 
+    if (!this.isModified("password")) { return next(); }
+    const salt = await bcrypt.genSalt(10);
+    this.password = await bcrypt.hash(this.password, salt);
+
     next();
 });
+
+// Compare entered password with hashed password
+UserSchema.methods.matchPassword = async function (enteredPassword) {
+    return await bcrypt.compare(enteredPassword, this.password);
+};
 
 const User = mongoose.model('User', UserSchema);
 
