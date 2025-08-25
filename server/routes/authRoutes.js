@@ -7,5 +7,5 @@ router.post('/register', authController.registerUser);
 router.post('/login', authController.loginUser);
 router.post('/updatePass', authController.updatePassword);
 router.post('/updateProfile', updateProfileController.updateProfile);
-router.post('/profilePic', updateProfileController.updateProfilePic);
+router.post('/profilePic', updateProfileController.uploadProfilePic);
 module.exports = router;

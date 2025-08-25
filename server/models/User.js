@@ -36,7 +36,8 @@ const UserSchema = new Schema({
         default: ''
     },
     profile_pic: {
-        type: SchemaTypes.Buffer
+        type: SchemaTypes.String,
+        default: ''
     },
     city: {
         type: SchemaTypes.String,
@@ -307,6 +308,10 @@ const UserSchema = new Schema({
         enum: ['cm', 'ft'],
         default: 'cm'
     },
+    clubs:{
+        type: SchemaTypes.Array,
+        default:[]
+    }
 },
     {
         timestamps: true
