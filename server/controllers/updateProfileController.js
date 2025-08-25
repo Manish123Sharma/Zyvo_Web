@@ -1,8 +1,18 @@
 const User = require('../models/User.js');
 const multer = require("multer");
+const cloudinary = require('cloudinary');
+const fs = require("fs");
 
-const storage = multer.memoryStorage();
-const upload = multer({ storage });
+// const storage = multer.memoryStorage();
+// const upload = multer({ storage });
+
+cloudinary.config({
+    cloud_name: process.env.CLOUD_NAME,
+    api_key: process.env.CLOUD_API_KEY,
+    api_secret: process.env.CLOUD_API_SECRET,
+});
+
+const upload = multer({ dest: "uploads/" });
 
 exports.updateProfile = async (req, res) => {
     try {
@@ -51,29 +61,58 @@ exports.updateProfile = async (req, res) => {
     }
 };
 
-exports.updateProfilePic = [
+// exports.updateProfilePic = [
+//     upload.single("profile_pic"),
+//     async (req, res) => {
+//         try {
+//             const { userId } = req.body;
+
+//             if (!req.file) {
+//                 return res.status(400).json({ message: "No file uploaded" });
+//             }
+
+//             const updatedUser = await User.findByIdAndUpdate(
+//                 userId,
+//                 { profile_pic: req.file.buffer },
+//                 { new: true }
+//             );
+
+//             if (!updatedUser) {
+//                 return res.status(404).json({ message: "User not found" });
+//             }
+
+//             res.json({ message: "Profile picture updated", user: updatedUser });
+//         } catch (err) {
+//             res.status(500).json({ message: err.message });
+//         }
+//     }
+// ];
+
+
+exports.uploadProfilePic = [
     upload.single("profile_pic"),
     async (req, res) => {
         try {
-            const { userId } = req.body;
+            const filePath = req.file.path;
 
-            if (!req.file) {
-                return res.status(400).json({ message: "No file uploaded" });
-            }
+            // upload to cloudinary
+            const result = await cloudinary.uploader.upload(filePath, {
+                folder: "profile_pics",
+            });
 
-            const updatedUser = await User.findByIdAndUpdate(
-                userId,
-                { profile_pic: req.file.buffer },
+            // delete local file after upload
+            fs.unlinkSync(filePath);
+
+            // update user profile with Cloudinary URL
+            const user = await User.findByIdAndUpdate(
+                req.body.userId,
+                { profile_pic: result.secure_url },
                 { new: true }
             );
 
-            if (!updatedUser) {
-                return res.status(404).json({ message: "User not found" });
-            }
-
-            res.json({ message: "Profile picture updated", user: updatedUser });
+            res.json({ success: true, user });
         } catch (err) {
             res.status(500).json({ message: err.message });
         }
-    }
+    },
 ];
