@@ -97,3 +97,13 @@ exports.updatePassword = async (req, res) => {
         });
     }
 };
+
+exports.googleLogin = async (req, res) => {
+    try {
+        console.log('Google Login');
+
+    } catch (err) {
+        console.log(`Error: ${err}`);
+
+    }
+};
