@@ -3,9 +3,6 @@ const multer = require("multer");
 const cloudinary = require('cloudinary');
 const fs = require("fs");
 
-// const storage = multer.memoryStorage();
-// const upload = multer({ storage });
-
 cloudinary.config({
     cloud_name: process.env.CLOUD_NAME,
     api_key: process.env.CLOUD_API_KEY,
@@ -60,34 +57,6 @@ exports.updateProfile = async (req, res) => {
         res.status(500).json({ message: err.message });
     }
 };
-
-// exports.updateProfilePic = [
-//     upload.single("profile_pic"),
-//     async (req, res) => {
-//         try {
-//             const { userId } = req.body;
-
-//             if (!req.file) {
-//                 return res.status(400).json({ message: "No file uploaded" });
-//             }
-
-//             const updatedUser = await User.findByIdAndUpdate(
-//                 userId,
-//                 { profile_pic: req.file.buffer },
-//                 { new: true }
-//             );
-
-//             if (!updatedUser) {
-//                 return res.status(404).json({ message: "User not found" });
-//             }
-
-//             res.json({ message: "Profile picture updated", user: updatedUser });
-//         } catch (err) {
-//             res.status(500).json({ message: err.message });
-//         }
-//     }
-// ];
-
 
 exports.uploadProfilePic = [
     upload.single("profile_pic"),
