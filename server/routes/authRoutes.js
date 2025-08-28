@@ -3,6 +3,7 @@ const router = express.Router();
 const authController = require('../controllers/authController');
 const updateProfileController = require('../controllers/updateProfileController');
 const photoController = require('../controllers/photosController');
+const videoController = require('../controllers/videosController');
 
 router.post('/register', authController.registerUser);
 
@@ -21,6 +22,11 @@ router.post(
 router.post(
     '/uploadPhotos',
     photoController.uploadPhotos
+);
+
+router.post(
+    '/uploadVideos',
+    videoController.uploadVideos
 );
 
 module.exports = router;
