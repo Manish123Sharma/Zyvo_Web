@@ -26,7 +26,7 @@ const ActivitySchema = new Schema({
     },
     startTime: {
         type: SchemaTypes.Date,
-        default: SchemaTypes.Date.now,
+        default: () => new Date().toLocaleTimeString("en-GB", { hour: "2-digit", minute: "2-digit" }),
         required: true
     },
     distance: {
